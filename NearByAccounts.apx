@@ -1,0 +1,24 @@
+public with sharing class NearByAccount {
+   
+    @AuraEnabled
+    public static List<Account> getNearAccounts(Id accId){
+        Account acc = [SELECT BillingLatitude, BillingLongitude, Name, Id FROM Account
+                      WHERE Id= :accId LIMIT 1];
+        System.debug('Latitude: '+acc.BillingLatitude);
+        System.debug('Longitude: '+acc.BillingLongitude);
+        Decimal accLat = acc.BillingLatitude;
+        Decimal accLon = acc.BillingLongitude;
+        List<Account> accList = [SELECT Id, Name, BillingLatitude, ParentId, BillingLongitude, BillingCity, BillingState, BillingPostalCode, BillingCountry, BillingStreet,
+                                 Distance(BillingAddress, GeoLocation(:accLat, :accLon),'mi') dist
+                                 FROM Account
+                                WHERE Distance(BillingAddress, GeoLocation(:accLat, :accLon),'mi') < 5
+                                AND Distance(BillingAddress, GeoLocation(:accLat, :accLon),'mi') > 0];
+      for ( Account acct : accList ) {
+         System.debug( acct.get('dist' ) );
+      }
+        System.debug('count list '+accList);
+        return accList; 
+       
+    }
+    
+}
