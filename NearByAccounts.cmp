@@ -1,0 +1,21 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" 
+                controller="NearByAccount">
+    <!-- attributes -->
+    <aura:attribute name="recordId" type="Id"/>
+    <aura:attribute name="account" type="Account"/>
+    <aura:attribute name="nearbyAccounts" type="Object[]"/>
+     <aura:attribute name="mapMarkers" type="Object"/>
+    <aura:attribute name="markersTitle" type="String" />
+    
+
+  
+    <!-- handlers-->
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+
+    <!-- the map component -->
+    <aura:if isTrue="{!v.mapMarkers.length > 0}">
+    	<lightning:map mapMarkers="{! v.mapMarkers }" markersTitle="{!v.markersTitle}" zoomLevel="13" />
+    </aura:if>
+
+	
+</aura:component>
